@@ -18,7 +18,6 @@ def sumofdigits():
 def ispal(): 
     if not HAS_CALLED_SIMP_FUNCTIONS:
         return print("Please use simp function to allow the use of a comp function")
-    
     number = input("Please enter a number to check if it is palindrome: ")
         
     if number.isdigit() == False:
