@@ -1,10 +1,10 @@
 # boolian function to make sure the functions cant be called if one of the simp functions did not get called
-HAS_CALLED_SIMP_FUNCTIONS = False
+# from .comp import HAS_CALLED_SIMP_FUNCTIONS
 
 # function asking for two numbers and prints its sum
 def sum_of_nums():
-    global HAS_CALLED_SIMP_FUNCTIONS
-    HAS_CALLED_SIMP_FUNCTIONS = True
+    # global HAS_CALLED_SIMP_FUNCTIONS
+    # HAS_CALLED_SIMP_FUNCTIONS = True
 
     num1 = input("Please enter first number: ")
     if not num1.isdigit():
@@ -21,8 +21,8 @@ def sum_of_nums():
 
 # function asking for two numbers and prints its subtraction   
 def subtraction_of_nums():
-    global HAS_CALLED_SIMP_FUNCTIONS
-    HAS_CALLED_SIMP_FUNCTIONS = True
+    # global HAS_CALLED_SIMP_FUNCTIONS
+    # HAS_CALLED_SIMP_FUNCTIONS = True
     num1 = input("Please enter first number: ")
     if not num1.isdigit():
       num1 = input("Please enter a number and not letters: ")
