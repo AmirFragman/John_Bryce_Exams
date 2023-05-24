@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customers Table</title>
+    <style>
+        /* Set font color for the entire webpage */
+        body {
+            color: #333;
+        }
+
+        /* Style for the table */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #001f5b;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Customer ID</th>
+                <th>Customer Name</th>
+                <th>City</th>
+                <th>Age</th>
+                <th>Active Customer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>John Doe</td>
+                <td>New York</td>
+                <td>32</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Jane Smith</td>
+                <td>London</td>
+                <td>28</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Bob Johnson</td>
+                <td>Paris</td>
+                <td>45</td>
+                <td>Yes</td>
+            </tr>
+
+        </tbody>
+    </table>
+    <script>
+      axios.get(' http://127.0.0.1:5000/customers')
+  .then(response => {
+    const data = response.data;
+    const table = document.querySelector('tbody');
+    data.forEach(customer => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${customer.cust_id}</td>
+        <td>${customer.cust_name}</td>
+        <td>${customer.city}</td>
+        <td>${customer.age}</td>
+        <td>${customer.cust_active}</td>
+      `;
+      table.appendChild(row);
+    });
+  })
+  .catch(error => console.error(error));
+      </script>
+</body>
+</html>
