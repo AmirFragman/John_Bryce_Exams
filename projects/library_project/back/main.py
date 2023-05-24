@@ -1,8 +1,9 @@
 from flask import Flask
+import flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="", static_folder="static")
 CORS(app)
 
 app.config['SECRET_KEY'] = ''
@@ -56,12 +57,12 @@ class Loans(db.Model):
     #     return f"Loans('{self.cust_ID}, {self.book_ID}', '{self.loan_date}','{self.return_date}')"
 @app.route("/")
 def homepage():
-    return "Hello"
+    return flask.redirect("/index.html")
 
 @app.route("/customers")
 def show_customers():
     customers = Customers.data()
-    return print(Customers.data())
+    print(Customers.data())
 
 if __name__ == '__main__':
     with app.app_context():
