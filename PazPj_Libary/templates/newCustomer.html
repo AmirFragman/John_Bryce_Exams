@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <title>Library Management System</title>
+    <style>
+        /* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+  }
+  
+  h1 {
+    color: rgb(99, 183, 92);
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .container h2 {
+    color: rgb(99, 183, 92);
+    margin-bottom: 10px;
+  }
+  
+  .input-group {
+    margin-bottom: 10px;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: rgb(99, 183, 92);
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+  }
+  
+  .button-group {
+    text-align: right;
+    margin-top: 10px;
+  }
+  
+  .button-group button {
+    padding: 8px 16px;
+    border-radius: 3px;
+    border: none;
+    background-color: rgb(99, 183, 92);
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-group button:not(:last-child) {
+    margin-right: 10px;
+  }
+  
+  .button-group button:hover {
+    background-color: #79a473;
+  }
+  
+  #Employees {
+    margin-top: 20px;
+  }
+  
+  #Employees div {
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+  }
+  
+  #Employees div:last-child {
+    margin-bottom: 0;
+  }
+  
+  #Employees div button {
+    background-color: #4ab80b;
+    margin-left: 5px;
+    color: #fff;
+  }
+  
+  #Employees div button:hover {
+    background-color: #d14040;
+  }
+  
+  a {
+    color: rgb(99, 183, 92);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+
+  #add-car-button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  #add-car-button:hover {
+    background-color: darkgreen;
+  }
+  
+  #add-car-button:focus {
+    outline: none;
+  }
+  .form-section {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+  }
+
+  button.container {
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    }
+    </style>
+</head>
+
+<body>
+    <h1>Library: Add Customer</h1>
+    <!-- Add a new customer -->
+    <div id="customerssss">
+        <h1>ALL CUSTOMERS</h1>
+    </div>
+
+    <h2>Add a new customer</h2>
+    Name:<input type="text" id="customer_name" placeholder="ENTER YOUR NAME" required>
+    City:<input type="text" id="customer_city" placeholder="ENTER YOUR CITY" required>
+    Age:<input type="number" id="customer_age" placeholder="ENTER YOUR AGE" required>
+    <button onclick="newCustomer()">Add new Customer</button> <br> <br> <br>
+    <a href="viewCustomers.html">View All Customers</a>
+    <a href="index.html">Home Page</a>
+
+    <script>
+      const MY_SERVER = 'http://127.0.0.1:5000';
+  
+      const newCustomer = async () => {
+          let data = {
+              name: customer_name.value,
+              city: customer_city.value,
+              age: customer_age.value
+          };
+  
+          try {
+              const response = await axios.post(`${MY_SERVER}/customers/new`, data);
+              console.log(response.data); // Optional: handle the response as needed
+          } catch (error) {
+              console.error(error); // Optional: handle the error as needed
+          }
+      }
+
+      
+  </script>
+  
+</body>
+
+</html>
