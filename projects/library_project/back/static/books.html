@@ -4,27 +4,57 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Books</title>
 </head>
 <body>
-    <form>
-        <label for="bookName">Book Name:</label>
-        <input type="text" id="bookName" name="bookName" required><br>
-      
-        <label for="author">Author:</label>
-        <input type="text" id="author" name="author" required><br>
-      
-        <label for="yearIssued">Year Issued:</label>
-        <input type="number" id="yearIssued" name="yearIssued" required><br>
-      
-        <label for="bookType">Book Type:</label>
-        <select id="bookType" name="bookType" required>
-          <option value="1">Type 1</option>
-          <option value="2">Type 2</option>
-          <option value="3">Type 3</option>
-        </select><br>
-      
-        <button type="submit">Add Book</button>
-      </form>
+  <h1>Books</h1>
+  <table>
+      <thead>
+          <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Author</th>
+              <th>Year</th>
+              <th>Book Type</th>
+              <th>Active</th>
+          </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+  </table>
+  
+  <script>
+      var tableData = {{ table_data | safe }};
+      var tbody = document.getElementById('table-body');
+
+      for (var i = 0; i < tableData.length; i++) {
+          var row = document.createElement('tr');
+          
+          var idCell = document.createElement('td');
+          idCell.textContent = tableData[i].id;
+          row.appendChild(idCell);
+
+          var nameCell = document.createElement('td');
+          nameCell.textContent = tableData[i].name;
+          row.appendChild(nameCell);
+
+          var authorCell = document.createElement('td');
+          authorCell.textContent = tableData[i].author;
+          row.appendChild(authorCell);
+
+          var yearCell = document.createElement('td');
+          yearCell.textContent = tableData[i].year;
+          row.appendChild(yearCell);
+
+          var bookTypeCell = document.createElement('td');
+          bookTypeCell.textContent = tableData[i].book_type;
+          row.appendChild(bookTypeCell);
+
+          var activeCell = document.createElement('td');
+          activeCell.textContent = tableData[i].active;
+          row.appendChild(activeCell);
+
+          tbody.appendChild(row);
+      }
+  </script>
 </body>
 </html>
