@@ -31,10 +31,15 @@ class Customers(db.Model):
     name = db.Column(db.String(50), nullable=False)
     city = db.Column(db.String(50), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    active = db.Column(db.Boolean, nullable=False)
+    active = db.Column(db.Boolean, default=True)
+
+    def __init__(self, name, city, age):
+        self.name = name
+        self.city = city
+        self.age = age
 
     def __repr__(self):
-        return f"Customer: ('{self.id}', '{self.name}','{self.city}','{self.age}', '{self.active}')"
+        return f"Customer: ('{self.id}', '{self.name}','{self.city}','{self.age}')"
 
     def to_dict(self):
         return {
@@ -56,8 +61,14 @@ class Books(db.Model):
     book_type = db.Column(db.Integer, nullable=False)
     active = db.Column(db.Boolean, nullable=False, default = True)
 
-    def _repr_(self):
-        return f"Books('{self.id}', '{self.name}','{self.author}','{self.year}','{self.book_type}', '{self.active})"
+    def __init__(self, name, author, year, book_type):
+        self.name = name
+        self.author = author
+        self.year = year
+        self.book_type = book_type
+
+    def __repr__(self):
+        return f"Books('{self.id}', '{self.name}','{self.author}','{self.year}','{self.book_type}',)"
     
     def to_dict(self):
         return {
@@ -66,7 +77,7 @@ class Books(db.Model):
             'author': self.author,
             'year': self.year,
             'book_type': self.book_type,
-            'active': self.active
+            
         }
 # Loans table - columns: id(PK), cust_id(FK), book_id(FK), loan_date, return_date, active
 class Loans(db.Model):
@@ -82,7 +93,13 @@ class Loans(db.Model):
     customer = db.relationship("Customers", backref="Loans")
     book = db.relationship("Books", backref="Loans")
 
-    def _repr_(self):
+    def __init__(self, cust_id, book_id, loan_date, return_date):
+        self.cust_id = cust_id
+        self.book_id = book_id
+        self.loan_date = loan_date
+        self.return_date = return_date
+
+    def __repr__(self):
         return f"Loans('{self.id}, {self.cust_id}, {self.book_id}', '{self.loan_date}','{self.return_date}')"
     
     def to_dict(self):
@@ -90,53 +107,106 @@ class Loans(db.Model):
             'id': self.id,
             'cust_id': self.cust_id,
             'book_id': self.book_id,
-            'author': self.author,
-            'year': self.year,
-            'book_type': self.book_type,
-            'active': self.active
+            'loan_date': self.loan_date,
+            'return_date': self.return_date
         }
     
 # <---------------------------------END of creating tables-------------------------------------------------------------->    
 
-# <---------------------------------server routes----------------------------------------------------------------------->   
+# <---------------------------------server routes and methods----------------------------------------------------------->   
 # MY_SERVER = http://127.0.0.1:5000
 
+# Homepage
 @app.route("/")
 def homepage():
     return flask.redirect("/index.html")
 
-# @app.route("/customers")
-# def show_customers():
-#     results = Customers.query.all()
-#     return flask.jsonify([customer.to_dict() for customer in results])
+#http://127.0.0.1:5000/allcustomers 
+@app.route('/allcustomers', methods = ['GET'])
+def get_all_customers():
+    customers = Customers.query.all()
+    return flask.jsonify([customer.to_dict() for customer in customers])
 
-# MY_SERVER = http://127.0.0.1:5000 + /allcustomers 
+#http://127.0.0.1:5000/newcustomer
+@app.route('/newcustomer', methods = ['POST'])
+def new_customer():
+    request_data = request.get_json()
+    name= request_data["name"]
+    city= request_data["city"]
+    age= request_data["age"]
 
-@app.route('/allcustomers', methods = ['GET', 'POST'])
-def get_all_cutomers():
-    res=[]
-    for customer in Customers.query.all():
-        res.append({"id":res.id,"name":res.name, "city":res.city, "age": res.age, "active":res.active})
-    return  (json.dumps(res))
+    if not name or not city or not age:
+        return flask.jsonify({'error': 'Missing required fields'})
 
-# MY_SERVER = http://127.0.0.1:5000 + /allbooks 
+    newCustomer = Customers(name = name, city = city, age = age)
+    db.session.add(newCustomer)
+    db.session.commit()
 
+    return flask.jsonify({'message': 'Customer created successfully'})
+
+#http://127.0.0.1:5000/allbooks 
 @app.route("/allbooks")
 def show_books():
-    res=[]
-    for book in Books.query.all():
-        res.append({"id": res.id,"name": res.name, "author": res.author,"year": res.year, "book_type": res.book_type, "active": res.active})
-    return  (json.dumps(res))
+    books = Books.query.all()
+    return flask.jsonify([book.to_dict() for book in books])
 
-# MY_SERVER = http://127.0.0.1:5000 + /allLoans 
-@app.route("/allLoans")
+#http://127.0.0.1:5000/newbook
+@app.route('/newbook', methods = ['POST'])
+def new_book():
+    request_data = request.get_json()
+    name= request_data["name"]
+    author= request_data["author"]
+    year= request_data["year"]
+    book_type = request_data["book_type"]
+
+    if not name or not author or not year or not book_type:
+        return flask.jsonify({'error': 'Missing required fields'})
+
+    newBook = Books(name = name, author = author, year = year, book_type = book_type)
+    db.session.add(newBook)
+    db.session.commit()
+
+    return flask.jsonify({'message': 'Book created successfully'})
+
+#http://127.0.0.1:5000/allLoans 
+@app.route("/allLoans", methods=["GET"])
 def show_loans():
-    res=[]
-    for loan in Loans.query.all():
-        res.append({"id": res.id, "cust_id": res.cust_id, "book_id": res.book_id, "loan_date": res.loan_date, "return_date": res.return_date, "active": res.active})
-    return  (json.dumps(res))
+    loans = Loans.query.all()
+    return flask.jsonify([loan.to_dict() for loan in loans])
 
-# <---------------------------------END of server routes-----------------------------------------------------------------------> 
+#http://127.0.0.1:5000/newloan
+@app.route('/newloan', methods = ['POST'])
+def new_loan():
+    request_data = request.get_json()
+    cust_id= request_data["cust_id"]
+    book_id= request_data["book_id"]
+    loan_date = request_data.get('loan_date')
+    return_date = request_data.get('return_date')
+
+    if not cust_id or not book_id or not loan_date or not return_date:
+        return flask.jsonify({'error': 'Missing required fields'})
+    
+    try:
+        cust_id = int(cust_id)
+        book_id = int(book_id)
+        loan_date = datetime.strptime(loan_date, '%Y-%m-%d').date()
+        return_date = datetime.strptime(return_date, '%Y-%m-%d').date()
+    except ValueError:
+        return flask.jsonify({'error': 'Invalid field values'})
+    
+    customer = Customers.query.get(cust_id)
+    book = Books.query.get(book_id)
+
+    if not customer or not book:
+        return flask.jsonify({'error': 'Customer or book does not exist'})
+    
+    newLoan = Loans(cust_id=cust_id, book_id=book_id, loan_date=loan_date, return_date=return_date)
+    db.session.add(newLoan)
+    db.session.commit()
+
+    return flask.jsonify({'message': 'Loan created successfully'})
+
+# <---------------------------------END of server routes and methods-------------------------------------------------------------------> 
 
 if __name__ == '__main__':
     with app.app_context():
