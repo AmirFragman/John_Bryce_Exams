@@ -157,7 +157,6 @@ def update_customer(id=-1):
         updated_row.name =request_data["name"]
         updated_row.city =request_data["city"]
         updated_row.age =request_data["age"]
-        # updated_row.active =request_data["active"]
         db.session.commit()
         return f"Customer ID:{id}, Name: {updated_row.name} got updated"
     return "The customer does not exist"
