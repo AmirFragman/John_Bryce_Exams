@@ -79,7 +79,7 @@ class Books(db.Model):
             'book_type': self.book_type,
             'active': self.active
         }
-# Loans table - columns: id(PK), cust_id(FK), book_id(FK), loan_date, return_date, active
+# Loans table - columns: id(PK), cust_id(FK), book_id(FK), loan_date, return_date, active. relationships: customer, book
 class Loans(db.Model):
     __tablename__ = 'loans'
 
@@ -121,12 +121,14 @@ class Loans(db.Model):
 def homepage():
     return flask.redirect("/index.html")
 
+#Customers
 #http://127.0.0.1:5000/allcustomers 
 @app.route('/allcustomers', methods = ['GET','POST'])
 def get_all_customers():
     customers = Customers.query.all()
     return flask.jsonify([customer.to_dict() for customer in customers])
 
+#Customer addition
 #http://127.0.0.1:5000/newcustomer
 @app.route('/newcustomer', methods = ['POST'])
 def new_customer():
@@ -144,12 +146,42 @@ def new_customer():
 
     return flask.jsonify({'message': 'Customer created successfully'})
 
+#Customer update
+#http://127.0.0.1:5000/updateCustomer/<id>
+@app.route('/updateCustomer/<id>', methods = ['PUT'])
+@app.route('/updateCustomer/', methods = ['PUT'])
+def update_customer(id=-1):
+    request_data = request.get_json()
+    updated_row = Customers.query.filter_by(id=id).first()
+    if updated_row:
+        updated_row.name =request_data["name"]
+        updated_row.city =request_data["city"]
+        updated_row.age =request_data["age"]
+        # updated_row.active =request_data["active"]
+        db.session.commit()
+        return f"Customer ID:{id}, Name: {updated_row.name} got updated"
+    return "The customer does not exist"
+
+#Customer deletion
+#http://127.0.0.1:5000/deleteCustomer/<id>
+@app.route('/deleteCustomer/<id>', methods = ['PUT'])
+@app.route('/deleteCustomer/', methods = ['PUT'])
+def delete_customer(id=-1):
+    request_data = request.get_json()
+    delete_row = Customers.query.filter_by(id=id).first()
+    if delete_row:
+        delete_row.active =request_data["active"]
+        db.session.commit()
+        return f"Customer ID number:{delete_row.id} got deleted"
+    return "The customer does not exist"
+
+#Books
 #http://127.0.0.1:5000/allbooks 
 @app.route("/allbooks", methods = ['GET','POST'])
 def show_books():
     books = Books.query.all()
     return flask.jsonify([book.to_dict() for book in books])
-
+#Book addition
 #http://127.0.0.1:5000/newbook
 @app.route('/newbook', methods = ['POST'])
 def new_book():
@@ -168,6 +200,37 @@ def new_book():
 
     return flask.jsonify({'message': 'Book created successfully'})
 
+#Book update
+#http://127.0.0.1:5000/updateBook/<id>
+@app.route('/updateBook/<id>', methods = ['PUT'])
+@app.route('/updateBook/', methods = ['PUT'])
+def update_book(id=-1):
+    request_data = request.get_json()
+    updated_row = Books.query.filter_by(id=id).first()
+    if updated_row:
+        updated_row.name = request_data['name']
+        updated_row.author = request_data["author"]
+        updated_row.year = request_data["year"]
+        updated_row.book_type = request_data["book_type"]
+        updated_row.active = request_data["active"]
+        db.session.commit()
+        return f"Book ID:{id}, Name: {updated_row.name} got updated"
+    return "The book does not exist"
+
+#Book deletion
+#http://127.0.0.1:5000/deleteBook/<id>
+@app.route('/deleteBook/<id>', methods = ['PUT'])
+@app.route('/deleteBook/', methods = ['PUT'])
+def delete_book(id=-1):
+    request_data = request.get_json()
+    delete_row = Books.query.filter_by(id=id).first()
+    if delete_row:
+        delete_row.active = request_data["active"]
+        db.session.commit()
+        return f"Book ID:{id} got deleted"
+    return "The book does not exist"
+
+#Loans
 #http://127.0.0.1:5000/allLoans 
 @app.route("/allLoans", methods=['GET','POST'])
 def show_loans():
@@ -178,8 +241,8 @@ def show_loans():
 @app.route('/newloan', methods = ['POST'])
 def new_loan():
     request_data = request.get_json()
-    cust_id= request_data["cust_id"]
-    book_id= request_data["book_id"]
+    cust_id = request_data["cust_id"]
+    book_id = request_data["book_id"]
     loan_date = request_data.get('loan_date')
     return_date = request_data.get('return_date')
 
@@ -205,6 +268,37 @@ def new_loan():
     db.session.commit()
 
     return flask.jsonify({'message': 'Loan created successfully'})
+
+#Loan update
+#http://127.0.0.1:5000/updateLoan/<id>
+@app.route('/updateLoan/<id>', methods = ['PUT'])
+@app.route('/updateLoan/', methods = ['PUT'])
+def update_loan(id=-1):
+    request_data = request.get_json()
+    updated_row = Loans.query.filter_by(id=id).first()
+    if updated_row:
+        updated_row.cust_id = request_data["cust_id"]
+        updated_row.book_id = request_data["book_id"]
+        updated_row.loan_date = request_data["loan_date"]
+        updated_row.return_date = request_data["return_date"]
+        updated_row.active = request_data["active"]
+        db.session.commit()
+        return f"Loan ID:{id}, loaned by Customer: {updated_row.cust_id} got updated"
+    return "The loan does not exist"
+
+#Loan deletion
+#http://127.0.0.1:5000/deleteLoan/<id>
+@app.route('/deleteLoan/<id>', methods = ['PUT'])
+@app.route('/deleteLoan/', methods = ['PUT'])
+def delete_loan(id=-1):
+    request_data = request.get_json()
+    delete_row = Loans.query.filter_by(id=id).first()
+    if delete_row:
+        delete_row.active = request_data["active"]
+        db.session.commit()
+        return f"Loan ID:{id} got deleted"
+    return "The loan does not exist"
+
 
 # <---------------------------------END of server routes and methods-------------------------------------------------------------------> 
 
