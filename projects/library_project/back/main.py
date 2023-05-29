@@ -130,7 +130,7 @@ def get_all_customers():
 
 #Customer addition
 #http://127.0.0.1:5000/newcustomer
-@app.route('/newcustomer', methods = ['POST'])
+@app.route('/newcustomer', methods = ['GET','POST'])
 def new_customer():
     request_data = request.get_json()
     name= request_data["name"]
