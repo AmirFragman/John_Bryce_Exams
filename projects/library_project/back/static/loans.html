@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-    <title>Books</title>
+    <title>Loans</title>
   </head>
   <body>
     <h1>Books</h1>
@@ -14,10 +14,10 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Name</th>
-          <th>Author</th>
-          <th>Year Published</th>
-          <th>Book Type</th>
+          <th>Customer's ID</th>
+          <th>Book's ID</th>
+          <th>Loan date</th>
+          <th>Return date</th>
           <th>Active</th>
         </tr>
       </thead>
@@ -27,7 +27,7 @@
     <script>
       MY_SERVER = "http://127.0.0.1:5000";
 
-        axios.get(MY_SERVER + "/allbooks").then((response) => {
+        axios.get(MY_SERVER + "/allLoans").then((response) => {
           var tableData = response.data;
 
           var tbody = document.getElementById("table-body");
@@ -39,21 +39,21 @@
             idCell.textContent = tableData[i].id;
             row.appendChild(idCell);
 
-            var nameCell = document.createElement("td");
-            nameCell.textContent = tableData[i].name;
-            row.appendChild(nameCell);
+            var custIDCell = document.createElement("td");
+            custIDCell.textContent = tableData[i].cust_id;
+            row.appendChild(custIDCell);
 
-            var authorCell = document.createElement("td");
-            authorCell.textContent = tableData[i].author;
-            row.appendChild(authorCell);
+            var bookIDCell = document.createElement("td");
+            bookIDCell.textContent = tableData[i].book_id;
+            row.appendChild(bookIDCell);
 
-            var yearCell = document.createElement("td");
-            yearCell.textContent = tableData[i].year;
-            row.appendChild(yearCell);
+            var loanDateCell = document.createElement("td");
+            loanDateCell.textContent = tableData[i].loan_date;
+            row.appendChild(loanDateCell);
 
-            var bookTypeCell = document.createElement("td");
-            bookTypeCell.textContent = tableData[i].book_type;
-            row.appendChild(bookTypeCell);
+            var returnDateCell = document.createElement("td");
+            returnDateCell.textContent = tableData[i].return_date;
+            row.appendChild(returnDateCell);
 
             var activeCell = document.createElement("td");
             activeCell.textContent = tableData[i].active;

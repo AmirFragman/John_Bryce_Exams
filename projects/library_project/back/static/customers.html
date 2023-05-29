@@ -1,87 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Customers Table</title>
-    <style>
-        /* Set font color for the entire webpage */
-        body {
-            color: #333;
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-        /* Style for the table */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #001f5b;
-            color: #fff;
-        }
-    </style>
-</head>
-
-<body>
+    <title>Books</title>
+  </head>
+  <body>
+    <h1>Books</h1>
     <table>
-        <thead>
-            <tr>
-                <th>Customer ID</th>
-                <th>Customer Name</th>
-                <th>City</th>
-                <th>Age</th>
-                <th>Active Customer</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>John Doe</td>
-                <td>New York</td>
-                <td>32</td>
-                <td>Yes</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jane Smith</td>
-                <td>London</td>
-                <td>28</td>
-                <td>No</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Bob Johnson</td>
-                <td>Paris</td>
-                <td>45</td>
-                <td>Yes</td>
-            </tr>
-
-        </tbody>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>City</th>
+          <th>Age</th>
+          <th>Active</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
     </table>
+
     <script>
-      axios.get(' http://127.0.0.1:5000/customers')
-  .then(response => {
-    const data = response.data;
-    const table = document.querySelector('tbody');
-    data.forEach(customer => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${customer.cust_id}</td>
-        <td>${customer.cust_name}</td>
-        <td>${customer.city}</td>
-        <td>${customer.age}</td>
-        <td>${customer.cust_active}</td>
-      `;
-      table.appendChild(row);
-    });
-  })
-  .catch(error => console.error(error));
-      </script>
-</body>
+      MY_SERVER = "http://127.0.0.1:5000";
+
+        axios.get(MY_SERVER + "/allcustomers").then((response) => {
+          var tableData = response.data;
+
+          var tbody = document.getElementById("table-body");
+
+          for (var i = 0; i < tableData.length; i++) {
+            var row = document.createElement("tr");
+
+            var idCell = document.createElement("td");
+            idCell.textContent = tableData[i].id;
+            row.appendChild(idCell);
+
+            var nameCell = document.createElement("td");
+            nameCell.textContent = tableData[i].name;
+            row.appendChild(nameCell);
+
+            var cityCell = document.createElement("td");
+            cityCell.textContent = tableData[i].city;
+            row.appendChild(cityCell);
+
+            var ageCell = document.createElement("td");
+            ageCell.textContent = tableData[i].age;
+            row.appendChild(ageCell);
+
+            var activeCell = document.createElement("td");
+            activeCell.textContent = tableData[i].active;
+            row.appendChild(activeCell);
+
+            tbody.appendChild(row);
+          }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    </script>
+  </body>
 </html>

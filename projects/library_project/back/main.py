@@ -39,7 +39,7 @@ class Customers(db.Model):
         self.age = age
 
     def __repr__(self):
-        return f"Customer: ('{self.id}', '{self.name}','{self.city}','{self.age}')"
+        return f"Customer: ('{self.id}', '{self.name}','{self.city}','{self.age}', {self.active})"
 
     def to_dict(self):
         return {
@@ -68,7 +68,7 @@ class Books(db.Model):
         self.book_type = book_type
 
     def __repr__(self):
-        return f"Books('{self.id}', '{self.name}','{self.author}','{self.year}','{self.book_type}',)"
+        return f"Books('{self.id}', '{self.name}','{self.author}','{self.year}','{self.book_type}', {self.active})"
     
     def to_dict(self):
         return {
@@ -77,7 +77,7 @@ class Books(db.Model):
             'author': self.author,
             'year': self.year,
             'book_type': self.book_type,
-            
+            'active': self.active
         }
 # Loans table - columns: id(PK), cust_id(FK), book_id(FK), loan_date, return_date, active
 class Loans(db.Model):
@@ -100,7 +100,7 @@ class Loans(db.Model):
         self.return_date = return_date
 
     def __repr__(self):
-        return f"Loans('{self.id}, {self.cust_id}, {self.book_id}', '{self.loan_date}','{self.return_date}')"
+        return f"Loans('{self.id}, {self.cust_id}, {self.book_id}', '{self.loan_date}','{self.return_date}', {self.active})"
     
     def to_dict(self):
         return {
@@ -122,7 +122,7 @@ def homepage():
     return flask.redirect("/index.html")
 
 #http://127.0.0.1:5000/allcustomers 
-@app.route('/allcustomers', methods = ['GET'])
+@app.route('/allcustomers', methods = ['GET','POST'])
 def get_all_customers():
     customers = Customers.query.all()
     return flask.jsonify([customer.to_dict() for customer in customers])
@@ -145,7 +145,7 @@ def new_customer():
     return flask.jsonify({'message': 'Customer created successfully'})
 
 #http://127.0.0.1:5000/allbooks 
-@app.route("/allbooks")
+@app.route("/allbooks", methods = ['GET','POST'])
 def show_books():
     books = Books.query.all()
     return flask.jsonify([book.to_dict() for book in books])
@@ -169,7 +169,7 @@ def new_book():
     return flask.jsonify({'message': 'Book created successfully'})
 
 #http://127.0.0.1:5000/allLoans 
-@app.route("/allLoans", methods=["GET"])
+@app.route("/allLoans", methods=['GET','POST'])
 def show_loans():
     loans = Loans.query.all()
     return flask.jsonify([loan.to_dict() for loan in loans])
