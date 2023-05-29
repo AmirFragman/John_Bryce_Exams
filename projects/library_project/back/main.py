@@ -130,17 +130,17 @@ def get_all_customers():
 
 #Customer addition
 #http://127.0.0.1:5000/newcustomer
-@app.route('/newcustomer', methods = ['GET','POST'])
+@app.route('/newcustomer', methods = ['POST'])
 def new_customer():
-    request_data = request.get_json()
-    name= request_data["name"]
-    city= request_data["city"]
-    age= request_data["age"]
+    data = request.get_json()
+    name= data["name"]
+    city= data["city"]
+    age= data["age"]
 
     if not name or not city or not age:
         return flask.jsonify({'error': 'Missing required fields'})
 
-    newCustomer = Customers(name = name, city = city, age = age)
+    newCustomer = Customers(name, city, age)
     db.session.add(newCustomer)
     db.session.commit()
 
@@ -151,12 +151,12 @@ def new_customer():
 @app.route('/updateCustomer/<id>', methods = ['PUT'])
 @app.route('/updateCustomer/', methods = ['PUT'])
 def update_customer(id=-1):
-    request_data = request.get_json()
+    data = request.get_json()
     updated_row = Customers.query.filter_by(id=id).first()
     if updated_row:
-        updated_row.name =request_data["name"]
-        updated_row.city =request_data["city"]
-        updated_row.age =request_data["age"]
+        updated_row.name =data["name"]
+        updated_row.city =data["city"]
+        updated_row.age =data["age"]
         db.session.commit()
         return f"Customer ID:{id}, Name: {updated_row.name} got updated"
     return "The customer does not exist"
@@ -166,10 +166,10 @@ def update_customer(id=-1):
 @app.route('/deleteCustomer/<id>', methods = ['PUT'])
 @app.route('/deleteCustomer/', methods = ['PUT'])
 def delete_customer(id=-1):
-    request_data = request.get_json()
+    data = request.get_json()
     delete_row = Customers.query.filter_by(id=id).first()
     if delete_row:
-        delete_row.active =request_data["active"]
+        delete_row.active =data["active"]
         db.session.commit()
         return f"Customer ID number:{delete_row.id} got deleted"
     return "The customer does not exist"
@@ -184,11 +184,11 @@ def show_books():
 #http://127.0.0.1:5000/newbook
 @app.route('/newbook', methods = ['POST'])
 def new_book():
-    request_data = request.get_json()
-    name= request_data["name"]
-    author= request_data["author"]
-    year= request_data["year"]
-    book_type = request_data["book_type"]
+    data = request.get_json()
+    name= data["name"]
+    author= data["author"]
+    year= data["year"]
+    book_type = data["book_type"]
 
     if not name or not author or not year or not book_type:
         return flask.jsonify({'error': 'Missing required fields'})
@@ -204,14 +204,14 @@ def new_book():
 @app.route('/updateBook/<id>', methods = ['PUT'])
 @app.route('/updateBook/', methods = ['PUT'])
 def update_book(id=-1):
-    request_data = request.get_json()
+    data = request.get_json()
     updated_row = Books.query.filter_by(id=id).first()
     if updated_row:
-        updated_row.name = request_data['name']
-        updated_row.author = request_data["author"]
-        updated_row.year = request_data["year"]
-        updated_row.book_type = request_data["book_type"]
-        updated_row.active = request_data["active"]
+        updated_row.name = data['name']
+        updated_row.author = data["author"]
+        updated_row.year = data["year"]
+        updated_row.book_type = data["book_type"]
+        updated_row.active = data["active"]
         db.session.commit()
         return f"Book ID:{id}, Name: {updated_row.name} got updated"
     return "The book does not exist"
@@ -221,10 +221,10 @@ def update_book(id=-1):
 @app.route('/deleteBook/<id>', methods = ['PUT'])
 @app.route('/deleteBook/', methods = ['PUT'])
 def delete_book(id=-1):
-    request_data = request.get_json()
+    data = request.get_json()
     delete_row = Books.query.filter_by(id=id).first()
     if delete_row:
-        delete_row.active = request_data["active"]
+        delete_row.active = data["active"]
         db.session.commit()
         return f"Book ID:{id} got deleted"
     return "The book does not exist"
@@ -239,11 +239,11 @@ def show_loans():
 #http://127.0.0.1:5000/newloan
 @app.route('/newloan', methods = ['POST'])
 def new_loan():
-    request_data = request.get_json()
-    cust_id = request_data["cust_id"]
-    book_id = request_data["book_id"]
-    loan_date = request_data.get('loan_date')
-    return_date = request_data.get('return_date')
+    data = request.get_json()
+    cust_id = data["cust_id"]
+    book_id = data["book_id"]
+    loan_date = data.get('loan_date')
+    return_date = data.get('return_date')
 
     if not cust_id or not book_id or not loan_date or not return_date:
         return flask.jsonify({'error': 'Missing required fields'})
@@ -273,14 +273,14 @@ def new_loan():
 @app.route('/updateLoan/<id>', methods = ['PUT'])
 @app.route('/updateLoan/', methods = ['PUT'])
 def update_loan(id=-1):
-    request_data = request.get_json()
+    data = request.get_json()
     updated_row = Loans.query.filter_by(id=id).first()
     if updated_row:
-        updated_row.cust_id = request_data["cust_id"]
-        updated_row.book_id = request_data["book_id"]
-        updated_row.loan_date = request_data["loan_date"]
-        updated_row.return_date = request_data["return_date"]
-        updated_row.active = request_data["active"]
+        updated_row.cust_id = data["cust_id"]
+        updated_row.book_id = data["book_id"]
+        updated_row.loan_date = data["loan_date"]
+        updated_row.return_date = data["return_date"]
+        updated_row.active = data["active"]
         db.session.commit()
         return f"Loan ID:{id}, loaned by Customer: {updated_row.cust_id} got updated"
     return "The loan does not exist"
@@ -290,10 +290,10 @@ def update_loan(id=-1):
 @app.route('/deleteLoan/<id>', methods = ['PUT'])
 @app.route('/deleteLoan/', methods = ['PUT'])
 def delete_loan(id=-1):
-    request_data = request.get_json()
+    data = request.get_json()
     delete_row = Loans.query.filter_by(id=id).first()
     if delete_row:
-        delete_row.active = request_data["active"]
+        delete_row.active = data["active"]
         db.session.commit()
         return f"Loan ID:{id} got deleted"
     return "The loan does not exist"

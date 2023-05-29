@@ -3,7 +3,8 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="form_add.css">
   <head>
     <title>Add Customer</title>
     <style>
@@ -55,34 +56,47 @@
     </style>
   </head>
   <body>
-    <form action="/newcustomer" method="post">
+    
       <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required />
+      <input type="text" id="cust_name" required/>
 
       <label for="city">City:</label>
-      <input type="text" id="city" name="city" required />
+      <input type="text" id="cust_city" required/>
 
       <label for="age">Age:</label>
-      <input type="number" id="age" name="age" required />
+      <input type="number" id="cust_age" required/>
 
-      <input type="submit" value="Add Customer" onclick="postData();" />
-    </form>
+      <button onclick="newCust();"> submit</button>
+ 
 
     <script>
-      function postData() {
-        const url = "http://127.0.0.1:5000/newcustomer";
-        const data = JSON.stringify({
-          name: "Amir1",
-          city: "Tel avivo",
-          age: 32,
-        });
-        const options = {
-	    headers: {"content-type": "application/json"}}
-        
-        const res = axios.post(url, data, options);
-        console.log(res.data);
-      };
 
+        const newCust = async () => {
+        const url = "http://127.0.0.1:5000/newcustomer";
+        data = {
+          name: cust_name.value,
+          city: cust_city.value,
+          age: cust_age.value
+        }
+        customers = await axios.post(url, data)
+        }        
+      
+
+        //     function postData() {
+        // const url = "http://127.0.0.1:5000/newcustomer";
+        // const data = JSON.stringify({
+        //   name: name.value,
+        //   city: city.value,
+        //   age: age.value
+        // });
+        // const options = {headers: {"content-type": "application/json"}}
+
+        // const res = axios.post(url, data, options)
+        // .then(function (response) {
+        // console.log(response);
+        // })
+        // console.log(data);
+    //   }
       // axios.post(url[, data[, config]])
 
       // function postData() {
@@ -100,7 +114,7 @@
       //     .catch(error => {
       //         console.log(error);
       //     });
-      // }
+
     </script>
   </body>
 </html>
