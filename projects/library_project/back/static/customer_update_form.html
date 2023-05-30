@@ -41,7 +41,7 @@
         name: cust_name.value,
         city: cust_city.value,
         age: cust_age.value,
-        active: cust_active.value 
+        active: cust_active.value === '1'
       };
 
       axios.put(url, data).then((response) => {

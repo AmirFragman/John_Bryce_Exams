@@ -219,7 +219,7 @@ def update_book(id):
 #http://127.0.0.1:5000/deleteBook/<id>
 @app.route('/deleteBook/<id>', methods = ['PUT'])
 @app.route('/deleteBook/', methods = ['PUT'])
-def delete_book(id=-1):
+def delete_book(id):
     data = request.get_json()
     delete_row = Books.query.filter_by(id=id).first()
     if delete_row:

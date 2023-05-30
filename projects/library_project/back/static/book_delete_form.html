@@ -2,28 +2,41 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <link rel="stylesheet" href="book_delete.css">
-    <title>Delete Customer</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="form_delete.css">
+    <title>Delete Book</title>
     
 </head>
 <body>
-    <form action="/deletecustomer" method="post">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-        
-        <label for="id">ID:</label>
-        <input type="number" id="id" name="id" required>
-        
-        <label for="active">Change Active Status:</label>
-        <select id="active" name="active">
-            <option value="true">True</option>
-            <option value="false">False</option>
-        </select>
-        
-        <input type="submit" value="Delete Customer">
-    </form>
+    <div>
+    <label for="id">Book ID:</label>
+    <input type="number" id="book_id" name="id" required min="1"><br>
+
+    <label for="name">Book Name:</label>
+    <input type="text" id="book_name" name="name" required minlength="2"><br>
+    
+    <button onclick="delCust();">Delete Book</button>
+</div>
+
+<script>
+    function delCust() {
+      const url = `http://127.0.0.1:5000/deleteBook/${book_id.value}`;
+      const data = {
+        id: book_id.value,
+        name: book_name.value,
+        active: false
+      };
+
+      axios.put(url, data).then((response) => {
+          const message = `Deleted Book ${book_name.value}, with ID: ${book_id.value}`;
+          alert(message);
+        })
+        .catch((error) => {
+          console.error("Error deleting Book:", error);
+        });
+    }
+  </script>
 </body>
 </html>
