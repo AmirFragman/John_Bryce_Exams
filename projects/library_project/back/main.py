@@ -175,13 +175,13 @@ def delete_customer(id):
 
 #Books
 #http://127.0.0.1:5000/allbooks 
-@app.route("/allbooks", methods = ['GET','POST'])
+@app.route("/allBooks", methods = ['GET','POST'])
 def show_books():
     books = Books.query.all()
     return flask.jsonify([book.to_dict() for book in books])
 #Book addition
 #http://127.0.0.1:5000/newbook
-@app.route('/newbook', methods = ['POST'])
+@app.route('/newBook', methods = ['POST'])
 def new_book():
     data = request.get_json()
     name= data["name"]
@@ -200,7 +200,7 @@ def new_book():
 
 #Book update
 #http://127.0.0.1:5000/updateBook/<id>
-@app.route('/updateBook/<id>', methods = ['PUT'])
+@app.route('/updateBook/<id>', methods = ['GET', 'PUT'])
 @app.route('/updateBook/', methods = ['PUT'])
 def update_book(id):
     data = request.get_json()

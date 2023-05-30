@@ -13,7 +13,7 @@
 
 <body>
   <div>
-    <label for="id">ID:</label>
+    <label for="id">Book's ID:</label>
     <input type="number" id="book_id" name="id" required min="1"><br>
 
     <label for="name">Book's Name: </label>
@@ -28,10 +28,10 @@
     <label for="btype">Book type: </label><br>
     <input type="number" id="btype" required min="1" max="3" style="padding: 5px"/><br>
 
-    <label for="active">Active:</label>
-    <select id="book_active" name="active">
-      <option value='True'>True</option>
-      <option value='False'>False</option>
+    <label for="book_active">Active:</label>
+    <select id="book_active" name="book_active">
+      <option value=1>True</option>
+      <option value=0>False</option>
   </select><br>
 
   <button onclick="updBook();">Update book</button>
@@ -46,7 +46,7 @@
         author: book_author.value,
         year: book_year.value,
         book_type: btype.value,
-        active: book_active.value 
+        active: book_active.value === '1'
       };
 
       axios.put(url, data).then((response) => {
