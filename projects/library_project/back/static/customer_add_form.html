@@ -4,7 +4,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
-  <link rel="stylesheet" href="form_add.css">
+  <link rel="stylesheet" href="form_add.css" />
   <head>
     <title>Add Customer</title>
     <style>
@@ -56,65 +56,36 @@
     </style>
   </head>
   <body>
-    
+    <div>
       <label for="name">Name:</label>
-      <input type="text" id="cust_name" required/>
+      <input type="text" id="cust_name" required style="padding: 5px"/><br />
 
       <label for="city">City:</label>
-      <input type="text" id="cust_city" required/>
+      <input type="text" id="cust_city" required style="padding: 5px"/><br />
 
       <label for="age">Age:</label>
-      <input type="number" id="cust_age" required/>
+      <input type="number" id="cust_age" required min="5" style="padding: 5px"/><br>
 
-      <button onclick="newCust();"> submit</button>
- 
+      <button onclick="newCust();">Create new customer</button>
+    </div>
 
     <script>
-
-        const newCust = async () => {
-        const url = "http://127.0.0.1:5000/newcustomer";
-        data = {
+      function newCust() {
+        const url = "http://127.0.0.1:5000/newCustomer";
+        const data = {
           name: cust_name.value,
           city: cust_city.value,
-          age: cust_age.value
-        }
-        customers = await axios.post(url, data)
-        }        
-      
+          age: cust_age.value,
+        };
 
-        //     function postData() {
-        // const url = "http://127.0.0.1:5000/newcustomer";
-        // const data = JSON.stringify({
-        //   name: name.value,
-        //   city: city.value,
-        //   age: age.value
-        // });
-        // const options = {headers: {"content-type": "application/json"}}
-
-        // const res = axios.post(url, data, options)
-        // .then(function (response) {
-        // console.log(response);
-        // })
-        // console.log(data);
-    //   }
-      // axios.post(url[, data[, config]])
-
-      // function postData() {
-
-      //     const formData = {
-      //     "name": "Amir1",
-      //     "city": "Tel avivo",
-      //     "age": 32
-      //     };
-
-      //     axios.post('/newcustomer', formData, { headers: headers })
-      //     .then(response => {
-      //         console.log(response.data);
-      //     })
-      //     .catch(error => {
-      //         console.log(error);
-      //     });
-
+        axios.post(url, data).then((response) => {
+            const message = `New customer ${cust_name.value}, from: ${cust_city.value} was added`;
+            alert(message);
+          })
+          .catch((error) => {
+            console.error("Error adding customer:", error);
+          });
+      }
     </script>
   </body>
 </html>

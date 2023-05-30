@@ -90,8 +90,8 @@ class Loans(db.Model):
     return_date = db.Column(db.Date, nullable=False)
     active = db.Column(db.Boolean, default = True)
 
-    customer = db.relationship("Customers", backref="Loans")
-    book = db.relationship("Books", backref="Loans")
+    customer = db.relationship("Customers", backref="custLoans")
+    book = db.relationship("Books", backref="bookLoans")
 
     def __init__(self, cust_id, book_id, loan_date, return_date):
         self.cust_id = cust_id
@@ -123,14 +123,14 @@ def homepage():
 
 #Customers
 #http://127.0.0.1:5000/allcustomers 
-@app.route('/allcustomers', methods = ['GET','POST'])
+@app.route('/allCustomers', methods = ['GET','POST'])
 def get_all_customers():
     customers = Customers.query.all()
     return flask.jsonify([customer.to_dict() for customer in customers])
 
 #Customer addition
 #http://127.0.0.1:5000/newcustomer
-@app.route('/newcustomer', methods = ['POST'])
+@app.route('/newCustomer', methods = ['POST'])
 def new_customer():
     data = request.get_json()
     name= data["name"]

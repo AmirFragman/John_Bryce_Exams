@@ -9,20 +9,42 @@
     <title>Delete Customer</title>
 </head>
 <body>
-    <form action="/deletecustomer" method="post">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-        
+    <div>
         <label for="id">ID:</label>
-        <input type="number" id="id" name="id" required>
-        
+        <input type="number" id="cust_id" name="id" required min="1"><br>
+
+        <label for="name">Name:</label>
+        <input type="text" id="cust_name" name="name" required minlength="2"><br>
+
         <label for="active">Change Active Status:</label>
-        <select id="active" name="active">
+        <select id="cust_active" name="active">
             <option value="true">True</option>
             <option value="false">False</option>
         </select>
         
-        <input type="submit" value="Delete Customer">
-    </form>
+        <button onclick="delCust();">Delete Customer</button>
+    </div>
+
+    <script>
+        function delCust() {
+          const url = `http://127.0.0.1:5000/deletecustomers/${cust_id.value}`;
+          const data = {
+            id: cust_id.value,
+            name: cust_name.value,
+            active: cust_active.value
+          };
+  
+          axios.put(url, data).then((response) => {
+              const message = `Deleted customer ${cust_name.value}, with ID: ${cust_id.value}`;
+              alert(message);
+            })
+            .catch((error) => {
+              console.error("Error deleting customer:", error);
+            });
+        }
+      </script>
 </body>
 </html>
+
+
+
