@@ -27,11 +27,11 @@
 
     <script>
         function delCust() {
-          const url = `http://127.0.0.1:5000/deletecustomers/${cust_id.value}`;
+          const url = `http://127.0.0.1:5000/deleteCustomer/${cust_id.value}`;
           const data = {
             id: cust_id.value,
             name: cust_name.value,
-            active: cust_active.value
+            active: false
           };
   
           axios.put(url, data).then((response) => {

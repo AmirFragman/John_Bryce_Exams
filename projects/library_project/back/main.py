@@ -150,7 +150,7 @@ def new_customer():
 #http://127.0.0.1:5000/updateCustomer/<id>
 @app.route('/updateCustomer/<id>', methods = ['PUT'])
 @app.route('/updateCustomer/', methods = ['PUT'])
-def update_customer(id=-1):
+def update_customer(id):
     data = request.get_json()
     updated_row = Customers.query.filter_by(id=id).first()
     if updated_row:
@@ -165,11 +165,10 @@ def update_customer(id=-1):
 #http://127.0.0.1:5000/deleteCustomer/<id>
 @app.route('/deleteCustomer/<id>', methods = ['PUT'])
 @app.route('/deleteCustomer/', methods = ['PUT'])
-def delete_customer(id=-1):
-    data = request.get_json()
+def delete_customer(id):
     delete_row = Customers.query.filter_by(id=id).first()
     if delete_row:
-        delete_row.active =data["active"]
+        delete_row.active = False
         db.session.commit()
         return f"Customer ID number:{delete_row.id} got deleted"
     return "The customer does not exist"

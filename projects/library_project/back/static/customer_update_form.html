@@ -11,21 +11,48 @@
 </head>
 
 <body>
-  <form action="/updatecustomer" method="post">
+  <div>
+    <label for="id">ID:</label>
+    <input type="number" id="cust_id" name="id" required min="1"><br>
+
     <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
+    <input type="text" id="cust_name" style="padding: 5px"/><br />
 
     <label for="city">City:</label>
-    <input type="text" id="city" name="city" required>
+    <input type="text" id="cust_city" style="padding: 5px"/><br />
 
     <label for="age">Age:</label>
-    <input type="number" id="age" name="age" required>
+    <input type="number" id="cust_age" min="5" style="padding: 5px"/><br>
 
     <label for="active">Active:</label>
-    <input type="checkbox" id="active" name="active">
+    <select id="cust_active" name="active">
+      <option value="True">True</option>
+      <option value="False">False</option>
+  </select>
 
-    <input type="submit" value="Update Customer">
-  </form>
+    <button onclick="updCust();">Update customer</button>
+  </div>
+
+  <script>
+    function updCust() {
+      const url = `http://127.0.0.1:5000/updateCustomer/${cust_id.value}`;
+      const data = {
+        id: cust_id.value,
+        name: cust_name.value,
+        city: cust_city.value,
+        age: cust_age.value,
+        active: cust_active.value 
+      };
+
+      axios.put(url, data).then((response) => {
+          const message = `Updated customer ${cust_name.value}, with ID: ${cust_id.value}`;
+          alert(message);
+        })
+        .catch((error) => {
+          console.error("Error updating customer:", error);
+        });
+    }
+  </script>
 </body>
 
 </html>
