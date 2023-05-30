@@ -202,7 +202,7 @@ def new_book():
 #http://127.0.0.1:5000/updateBook/<id>
 @app.route('/updateBook/<id>', methods = ['PUT'])
 @app.route('/updateBook/', methods = ['PUT'])
-def update_book(id=-1):
+def update_book(id):
     data = request.get_json()
     updated_row = Books.query.filter_by(id=id).first()
     if updated_row:

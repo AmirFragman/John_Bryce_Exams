@@ -6,27 +6,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <link rel="stylesheet" href="book_update.css">
+  <link rel="stylesheet" href="form_update.css">
   <title>Update Book</title>
   
 </head>
 
 <body>
-  <form action="/updatecustomer" method="post">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
+  <div>
+    <label for="id">ID:</label>
+    <input type="number" id="book_id" name="id" required min="1"><br>
 
-    <label for="author">Author:</label>
-    <input type="text" id="city" name="city" required>
+    <label for="name">Book's Name: </label>
+    <input type="text" id="book_name" required style="padding: 5px" minlength="3"/> <br />
 
-    <label for="year">Year Published:</label>
-    <input type="number" id="age" name="age" required>
+    <label for="author">Author of book: </label>
+    <input type="text" id="book_author" required style="padding: 5px" minlength="3"/><br />
+
+    <label for="year">Year published: </label><br>
+    <input type="number" id="book_year" required min="1800" max="2023" style="padding: 5px"/><br>
+
+    <label for="btype">Book type: </label><br>
+    <input type="number" id="btype" required min="1" max="3" style="padding: 5px"/><br>
 
     <label for="active">Active:</label>
-    <input type="checkbox" id="active" name="active">
+    <select id="book_active" name="active">
+      <option value='True'>True</option>
+      <option value='False'>False</option>
+  </select><br>
 
-    <input type="submit" value="Update Book">
-  </form>
+  <button onclick="updBook();">Update book</button>
+  </div>
+
+  <script>
+    function updBook() {
+      const url = `http://127.0.0.1:5000/updateBook/${book_id.value}`;
+      const data = {
+        id: book_id.value,
+        name: book_name.value,
+        author: book_author.value,
+        year: book_year.value,
+        book_type: btype.value,
+        active: book_active.value 
+      };
+
+      axios.put(url, data).then((response) => {
+          const message = `Updated book ${book_name.value}, with ID: ${book_id.value}`;
+          alert(message);
+        })
+        .catch((error) => {
+          console.error("Error updating customer:", error);
+        });
+    }
+  </script>
 </body>
 
 </html>
