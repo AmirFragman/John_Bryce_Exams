@@ -235,6 +235,10 @@ def delete_book(id):
 def show_loans():
     loans = Loans.query.all()
     return flask.jsonify([loan.to_dict() for loan in loans])
+    # dicts = [loan.to_dict() for loan in loans]
+    # for dict in dicts:
+    #     dict["is_late": ...]
+    # return flask.jsonify(dicts)
 
 #http://127.0.0.1:5000/newLoan
 @app.route('/newLoan', methods = ['POST'])
