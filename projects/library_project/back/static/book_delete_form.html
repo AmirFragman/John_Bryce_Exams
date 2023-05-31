@@ -22,14 +22,14 @@
 
 <script>
     function delCust() {
-      const url = `http://127.0.0.1:5000/deleteBook/${book_id.value}`;
+      const url = `http://127.0.0.1:5000/books/${book_id.value}`;
       const data = {
         id: book_id.value,
         name: book_name.value,
         active: false
       };
 
-      axios.put(url, data).then((response) => {
+      axios.delete(url, data).then((response) => {
           const message = `Deleted Book ${book_name.value}, with ID: ${book_id.value}`;
           alert(message);
         })

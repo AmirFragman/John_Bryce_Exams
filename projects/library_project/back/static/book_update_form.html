@@ -43,7 +43,7 @@
 
   <script>
     function updBook() {
-      const url = `http://127.0.0.1:5000/updateBook/${book_id.value}`;
+      const url = `http://127.0.0.1:5000/books/${book_id.value}`;
       const data = {
         id: book_id.value,
         name: book_name.value,
@@ -53,7 +53,7 @@
         active: book_active.value === '1'
       };
 
-      axios.put(url, data).then((response) => {
+      axios.post(url, data).then((response) => {
           const message = `Updated book ${book_name.value}, with ID: ${book_id.value}`;
           alert(message);
         })

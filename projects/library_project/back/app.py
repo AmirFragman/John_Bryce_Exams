@@ -134,7 +134,7 @@ def get_all_customers():
     return flask.jsonify([customer.to_dict() for customer in customers])
 
 #Customer addition
-#http://127.0.0.1:5000/newcustomer
+#http://127.0.0.1:5000/customers
 @app.route('/customers', methods = ['POST'])
 def new_customer():
     data = request.get_json()
@@ -152,7 +152,7 @@ def new_customer():
     return flask.jsonify({'message': 'Customer created successfully'})
 
 #Customer update
-#http://127.0.0.1:5000/updateCustomer/<id>
+#http://127.0.0.1:5000/customers/<id>
 @app.route('/customers/<id>', methods = ['POST'])
 def update_customer(id):
     data = request.get_json()
@@ -166,7 +166,7 @@ def update_customer(id):
     return "The customer does not exist"
 
 #Customer deletion
-#http://127.0.0.1:5000/deleteCustomer/<id>
+#http://127.0.0.1:5000/customers/<id>
 @app.route('/customers/<id>', methods = ['DELETE'])
 def delete_customer(id):
     delete_row = Customers.query.filter_by(id=id).first()
@@ -177,14 +177,14 @@ def delete_customer(id):
     return "The customer does not exist"
 
 #Books
-#http://127.0.0.1:5000/allbooks 
-@app.route("/allBooks", methods = ['GET','POST'])
+#http://127.0.0.1:5000/books 
+@app.route("/books", methods = ['GET'])
 def show_books():
     books = Books.query.all()
     return flask.jsonify([book.to_dict() for book in books])
 #Book addition
-#http://127.0.0.1:5000/newbook
-@app.route('/newBook', methods = ['POST'])
+#http://127.0.0.1:5000/books
+@app.route('/books/', methods = ['POST'])
 def new_book():
     data = request.get_json()
     name= data["name"]
@@ -202,9 +202,8 @@ def new_book():
     return flask.jsonify({'message': 'Book created successfully'})
 
 #Book update
-#http://127.0.0.1:5000/updateBook/<id>
-@app.route('/updateBook/<id>', methods = ['GET', 'PUT'])
-@app.route('/updateBook/', methods = ['PUT'])
+#http://127.0.0.1:5000/books/<id>
+@app.route('/books/<id>', methods = ['POST'])
 def update_book(id):
     data = request.get_json()
     updated_row = Books.query.filter_by(id=id).first()
@@ -219,14 +218,12 @@ def update_book(id):
     return "The book does not exist"
 
 #Book deletion
-#http://127.0.0.1:5000/deleteBook/<id>
-@app.route('/deleteBook/<id>', methods = ['PUT'])
-@app.route('/deleteBook/', methods = ['PUT'])
+#http://127.0.0.1:5000/books/<id>
+@app.route('/books/<id>', methods = ['DELETE'])
 def delete_book(id):
-    data = request.get_json()
     delete_row = Books.query.filter_by(id=id).first()
     if delete_row:
-        delete_row.active = data["active"]
+        delete_row.active = False
         db.session.commit()
         return f"Book ID:{id} got deleted"
     return "The book does not exist"
@@ -305,3 +302,4 @@ def delete_loan(id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+    # app.run(debug=False)
