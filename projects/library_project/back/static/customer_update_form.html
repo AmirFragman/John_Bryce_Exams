@@ -35,7 +35,7 @@
 
   <script>
     function updCust() {
-      const url = `http://127.0.0.1:5000/updateCustomer/${cust_id.value}`;
+      const url = `http://127.0.0.1:5000/customers/${cust_id.value}`;
       const data = {
         id: cust_id.value,
         name: cust_name.value,
@@ -44,7 +44,7 @@
         active: cust_active.value === '1'
       };
 
-      axios.put(url, data).then((response) => {
+      axios.post(url, data).then((response) => {
           const message = `Updated customer ${cust_name.value}, with ID: ${cust_id.value}`;
           alert(message);
         })

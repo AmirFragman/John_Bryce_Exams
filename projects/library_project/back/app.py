@@ -128,14 +128,14 @@ def homepage():
 
 #Customers
 #http://127.0.0.1:5000/allcustomers 
-@app.route('/allCustomers', methods = ['GET','POST'])
+@app.route('/customers', methods = ['GET'])
 def get_all_customers():
     customers = Customers.query.all()
     return flask.jsonify([customer.to_dict() for customer in customers])
 
 #Customer addition
 #http://127.0.0.1:5000/newcustomer
-@app.route('/newCustomer', methods = ['POST'])
+@app.route('/customers', methods = ['POST'])
 def new_customer():
     data = request.get_json()
     name= data["name"]
@@ -153,8 +153,7 @@ def new_customer():
 
 #Customer update
 #http://127.0.0.1:5000/updateCustomer/<id>
-@app.route('/updateCustomer/<id>', methods = ['PUT'])
-@app.route('/updateCustomer/', methods = ['PUT'])
+@app.route('/customers/<id>', methods = ['POST'])
 def update_customer(id):
     data = request.get_json()
     updated_row = Customers.query.filter_by(id=id).first()
@@ -168,8 +167,7 @@ def update_customer(id):
 
 #Customer deletion
 #http://127.0.0.1:5000/deleteCustomer/<id>
-@app.route('/deleteCustomer/<id>', methods = ['PUT'])
-@app.route('/deleteCustomer/', methods = ['PUT'])
+@app.route('/customers/<id>', methods = ['DELETE'])
 def delete_customer(id):
     delete_row = Customers.query.filter_by(id=id).first()
     if delete_row:
