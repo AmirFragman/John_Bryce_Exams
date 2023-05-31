@@ -48,7 +48,6 @@
           <th>Name</th>
           <th>City</th>
           <th>Age</th>
-          <th>Active</th>
         </tr>
       </thead>
       <tbody id="table-body"></tbody>
@@ -81,10 +80,6 @@
             var ageCell = document.createElement("td");
             ageCell.textContent = tableData[i].age;
             row.appendChild(ageCell);
-
-            var activeCell = document.createElement("td");
-            activeCell.textContent = tableData[i].active;
-            row.appendChild(activeCell);
 
             tbody.appendChild(row);
           }

@@ -48,7 +48,6 @@
           <th>Author</th>
           <th>Year Published</th>
           <th>Book Type</th>
-          <th>Active</th>
         </tr>
       </thead>
       <tbody id="table-body"></tbody>
@@ -84,10 +83,6 @@
             var bookTypeCell = document.createElement("td");
             bookTypeCell.textContent = tableData[i].book_type;
             row.appendChild(bookTypeCell);
-
-            var activeCell = document.createElement("td");
-            activeCell.textContent = tableData[i].active;
-            row.appendChild(activeCell);
 
             tbody.appendChild(row);
           }

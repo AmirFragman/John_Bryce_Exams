@@ -130,7 +130,7 @@ def homepage():
 #http://127.0.0.1:5000/allcustomers 
 @app.route('/customers', methods = ['GET'])
 def get_all_customers():
-    customers = Customers.query.all()
+    customers = Customers.query.filter_by(active=1).all()
     return flask.jsonify([customer.to_dict() for customer in customers])
 
 #Customer addition
@@ -180,8 +180,9 @@ def delete_customer(id):
 #http://127.0.0.1:5000/books 
 @app.route("/books", methods = ['GET'])
 def show_books():
-    books = Books.query.all()
+    books = Books.query.filter_by(active=1).all()
     return flask.jsonify([book.to_dict() for book in books])
+
 #Book addition
 #http://127.0.0.1:5000/books
 @app.route('/books/', methods = ['POST'])

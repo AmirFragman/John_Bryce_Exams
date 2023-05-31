@@ -47,7 +47,6 @@
           <th>Book's ID</th>
           <th>Loan date</th>
           <th>Return date</th>
-          <th>Active</th>
         </tr>
       </thead>
       <tbody id="table-body"></tbody>
@@ -83,10 +82,6 @@
             var returnDateCell = document.createElement("td");
             returnDateCell.textContent = tableData[i].return_date;
             row.appendChild(returnDateCell);
-
-            var activeCell = document.createElement("td");
-            activeCell.textContent = tableData[i].active;
-            row.appendChild(activeCell);
 
             tbody.appendChild(row);
           }
