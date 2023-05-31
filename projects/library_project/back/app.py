@@ -6,10 +6,16 @@ from sqlalchemy import Column, String, Integer, ForeignKey, Date
 from sqlalchemy.orm import relationship
 from datetime import datetime, date
 from flask_cors import CORS
+import os
 
 app = Flask(__name__, static_url_path="", static_folder="static")
 app.config['SECRET_KEY'] = "SECRET_KEY_CODE"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library1.db'
+
+script_path = os.path.realpath(__file__)
+script_directory = os.path.dirname(script_path)
+db_path = os.path.join(script_directory, 'library.db')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = r'sqlite:///' + db_path
 db = SQLAlchemy(app)
 CORS(app)
 
@@ -300,6 +306,4 @@ def delete_loan(id):
 # <---------------------------------END of server routes and methods-------------------------------------------------------------------> 
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
