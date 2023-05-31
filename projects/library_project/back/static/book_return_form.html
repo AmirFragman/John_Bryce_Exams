@@ -9,29 +9,29 @@
     <title>Create new loan</title>
 </head>
 <body>
-    <form>
+    <div>
+        <label for="id">Loan ID:</label>
+        <input type="number" id="loan_id" name="loan_id" required min="1"><br>
+
         <label for="customerId">Customer ID:</label>
         <input type="number" id="customerId" name="customerId" required min="1"><br>
       
         <label for="bookId">Book ID:</label>
         <input type="number" id="bookId" name="bookId" required min="1"><br>
       
-        <label for="loanDate">Loan Date:</label>
-        <input type="date" id="loanDate" name="loanDate" required><br>
-      
         <label for="returnDate">Return Date:</label>
         <input type="date" id="returnDate" name="returnDate"><br>
       
-        <button type="button" onclick="newLoan()">Create Loan</button>
-      </form>
+        <button type="button" onclick="returnBook()">Create Loan</button>
+    </div>
       
       <script>
-        function newLoan() {
-          const url = "http://127.0.0.1:5000/newLoan";
+        function returnBook() {
+          const url = "http://127.0.0.1:5000/returnBook/${loan_id.value}";
           const data = {
+            id: loan_id.value,
             cust_id: customerId.value,
             book_id: bookId.value,
-            loan_date: loanDate.value,
             return_date: returnDate.value
           };
   

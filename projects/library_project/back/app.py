@@ -9,7 +9,7 @@ from flask_cors import CORS
 
 app = Flask(__name__, static_url_path="", static_folder="static")
 app.config['SECRET_KEY'] = "SECRET_KEY_CODE"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library1.db'
 db = SQLAlchemy(app)
 CORS(app)
 
@@ -88,8 +88,7 @@ class Loans(db.Model):
     book_id = db.Column(db.Integer, db.ForeignKey(Books.id))
     loan_date = db.Column(db.Date, nullable=False)
     return_date = db.Column(db.Date, nullable=False)
-    active = db.Column(db.Boolean, default = True)
-
+   
     customer = db.relationship("Customers", backref="custLoans")
     book = db.relationship("Books", backref="bookLoans")
 
@@ -235,8 +234,8 @@ def show_loans():
     loans = Loans.query.all()
     return flask.jsonify([loan.to_dict() for loan in loans])
 
-#http://127.0.0.1:5000/newloan
-@app.route('/newloan', methods = ['POST'])
+#http://127.0.0.1:5000/newLoan
+@app.route('/newLoan', methods = ['POST'])
 def new_loan():
     data = request.get_json()
     cust_id = data["cust_id"]
@@ -271,7 +270,7 @@ def new_loan():
 #http://127.0.0.1:5000/updateLoan/<id>
 @app.route('/updateLoan/<id>', methods = ['PUT'])
 @app.route('/updateLoan/', methods = ['PUT'])
-def update_loan(id=-1):
+def update_loan(id):
     data = request.get_json()
     updated_row = Loans.query.filter_by(id=id).first()
     if updated_row:
@@ -284,11 +283,11 @@ def update_loan(id=-1):
         return f"Loan ID:{id}, loaned by Customer: {updated_row.cust_id} got updated"
     return "The loan does not exist"
 
-#Loan deletion
-#http://127.0.0.1:5000/deleteLoan/<id>
-@app.route('/deleteLoan/<id>', methods = ['PUT'])
-@app.route('/deleteLoan/', methods = ['PUT'])
-def delete_loan(id=-1):
+#Return book
+#http://127.0.0.1:5000/returnBook/<id>
+@app.route('/returnBook/<id>', methods = ['PUT'])
+@app.route('/returnBook/', methods = ['PUT'])
+def delete_loan(id):
     data = request.get_json()
     delete_row = Loans.query.filter_by(id=id).first()
     if delete_row:
