@@ -9,6 +9,7 @@
     <title>Create new loan</title>
 </head>
 <body>
+  <div></div>
     <form>
         <label for="customerId">Customer ID:</label>
         <input type="number" id="customerId" name="customerId" required min="1"><br>
@@ -19,9 +20,6 @@
         <label for="loanDate">Loan Date:</label>
         <input type="date" id="loanDate" name="loanDate" required><br>
       
-        <label for="returnDate">Return Date:</label>
-        <input type="date" id="returnDate" name="returnDate"><br>
-      
         <button type="button" onclick="newLoan()">Create Loan</button>
       </form>
       
@@ -31,22 +29,17 @@
           const data = {
             cust_id: customerId.value,
             book_id: bookId.value,
-            loan_date: loanDate.value,
-            return_date: returnDate.value
+            loan_date: loanDate.value
           };
   
           axios.post(url, data).then((response) => {
               const message = `New loan created id of loaner: ${customerId.value}, Book ID: ${bookId.value}`;
               alert(message);
-              return_to_table();
+              window.location.assign = `http://127.0.0.1:5000/loans`;
             })
             .catch((error) => {
               console.error("Error adding book:", error);
             });
-        }
-        function return_to_table(){
-          const url = "http://127.0.0.1:5000/newLoan"
-          return url
         }
       </script>
 </body>

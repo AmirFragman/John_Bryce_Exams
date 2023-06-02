@@ -19,13 +19,17 @@
   </head>
   <body>
     <!-- Navigation bar -->
-    <div class="navbar d-flex">
+    <div class="navbar d-flex navbar-expand">
+      
       <h1 style="padding-left: 20%;">Library Management System</h1>
+      <div> </div>
       <div>
         <h5>Tables:</h5>
+
         <a href="customers.html" target="display">Customers</a>
         <a href="books.html" target="display">Books</a>
         <a href="loans.html" target="display">Loans</a>
+        <a href="loans_late.html" target="display">Late loans</a>
       </div>
     </div>
     
@@ -33,8 +37,11 @@
     <!-- left side navgation bar   -->
     <div class="main-content">
       <nav class="left-nav" >
-        <h5>Actions</h5>
+        <div>
+        <h5 style="padding-left: 32px;">Actions</h5>
+        
         <ul>
+          <li><a href="index.html">Home</a></li>
           <li><a href="customer_add_form.html" target="display">New Customer Form</a></li>
           <li><a href="customer_delete_form.html" target="display">Delete Customer Form</a></li>
           <li><a href="customer_update_form.html" target="display">Update Customer Form</a></li>
@@ -47,7 +54,6 @@
         </ul>
         <ul>
           <li><a href="loan_add_form.html" target="display">New Loan Form</a></li>
-          <li><a href="loan_update_form.html" target="display">Update Loan Form</a></li>
         </ul>
       </nav>
 

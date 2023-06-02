@@ -4,7 +4,7 @@ from flask import Flask, flash, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer, ForeignKey, Date
 from sqlalchemy.orm import relationship
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from flask_cors import CORS
 import os
 
@@ -93,7 +93,7 @@ class Loans(db.Model):
     cust_id = db.Column(db.Integer, db.ForeignKey(Customers.id))
     book_id = db.Column(db.Integer, db.ForeignKey(Books.id))
     loan_date = db.Column(db.Date, nullable=False)
-    return_date = db.Column(db.Date, nullable=False)
+    return_date = db.Column(db.Date)
    
     customer = db.relationship("Customers", backref="custLoans")
     book = db.relationship("Books", backref="bookLoans")
@@ -105,8 +105,7 @@ class Loans(db.Model):
         self.return_date = return_date
 
     def __repr__(self):
-        return f"Loans('{self.id}, {self.cust_id}, {self.book_id}', '{self.loan_date}','{self.return_date}')"
-    
+        return f"Loans('{self.id}, {self.cust_id}, {self.book_id}', '{self.loan_date}','{self.return_date}')"  
     def to_dict(self):
         return {
             'id': self.id,
@@ -235,10 +234,12 @@ def delete_book(id):
 def show_loans():
     loans = Loans.query.all()
     return flask.jsonify([loan.to_dict() for loan in loans])
-    # dicts = [loan.to_dict() for loan in loans]
-    # for dict in dicts:
-    #     dict["is_late": ...]
-    # return flask.jsonify(dicts)
+
+@app.route("/loans/late", methods=['GET'])
+def show_late_loans():
+    current_date = datetime.today().date()
+    late_loans = Loans.query.filter(Loans.return_date < current_date).all()
+    return flask.jsonify([loan.to_dict() for loan in late_loans])
 
 #http://127.0.0.1:5000/loans
 @app.route('/loans', methods = ['POST'])
@@ -246,32 +247,52 @@ def new_loan():
     data = request.get_json()
     cust_id = data["cust_id"]
     book_id = data["book_id"]
-    loan_date = data.get('loan_date')
-    return_date = data.get('return_date')
+    loan_date = data["loan_date"]
+  
 
-    if not cust_id or not book_id or not loan_date or not return_date:
+    if not cust_id or not book_id or not loan_date:
         return flask.jsonify({'error': 'Missing required fields'})
     
     try:
         cust_id = int(cust_id)
         book_id = int(book_id)
         loan_date = datetime.strptime(loan_date, '%Y-%m-%d').date()
-        return_date = datetime.strptime(return_date, '%Y-%m-%d').date()
+
+        book_type = get_book_type(book_id)
+
+        if book_type == 1:
+            return_date = datetime.strptime(str((loan_date + timedelta(days=10))), '%Y-%m-%d').date()
+        elif book_type == 2:
+            return_date = datetime.strptime(str((loan_date + timedelta(days=5))), '%Y-%m-%d').date()
+        elif book_type == 3:
+            return_date = datetime.strptime(str((loan_date + timedelta(days=2))), '%Y-%m-%d').date()
+        else:
+            return flask.jsonify({'error': 'Invalid book_type'})
+
+        # Convert return_date to the desired format before returning the response
+        # return_date_str = return_date.strftime('%Y-%m-%d')
+        # return_date = datetime.date(return_date_str)
+
+        newLoan = Loans(cust_id=cust_id, book_id=book_id, loan_date=loan_date, return_date=return_date)
+
+        db.session.add(newLoan)
+        db.session.commit()
+        return f"New loan was added. Loan ID: {newLoan.cust_id} Expected date of return: {return_date}"
+
     except ValueError:
-        return flask.jsonify({'error': 'Invalid field values'})
+        customer = Customers.query.get(cust_id)
+        book = Books.query.get(book_id)
+
+        if not customer or not book:
+            return flask.jsonify({'error': 'Customer or book does not exist'})
+
+        newLoan = Loans(cust_id=cust_id, book_id=book_id, loan_date=loan_date, return_date=return_date)
+
+        db.session.add(newLoan)
+        db.session.commit()
+
+        return flask.jsonify({'message': 'Loan created successfully'})
     
-    customer = Customers.query.get(cust_id)
-    book = Books.query.get(book_id)
-
-    if not customer or not book:
-        return flask.jsonify({'error': 'Customer or book does not exist'})
-    
-    newLoan = Loans(cust_id=cust_id, book_id=book_id, loan_date=loan_date, return_date=return_date)
-    db.session.add(newLoan)
-    db.session.commit()
-
-    return flask.jsonify({'message': 'Loan created successfully'})
-
 #Loan update
 #http://127.0.0.1:5000/loans/<id>
 @app.route('/loans/<id>', methods = ['POST'])
@@ -293,15 +314,23 @@ def update_loan(id):
 @app.route('/loans/<id>', methods = ['PUT'])
 def delete_loan(id):
     data = request.get_json()
-    delete_row = Loans.query.filter_by(id=id).first()
-    if delete_row:
-        delete_row.active = data["active"]
+    return_book = Loans.query.filter_by(id=id).first()
+    if return_book:
+        id = data['loan_id']
+        return_date = data['return_date']
         db.session.commit()
         return f"Loan ID:{id} got deleted"
     return "The loan does not exist"
 
+def get_book_type(book_id):
+    filtered_book = Books.query.filter_by(id=book_id).first()
+    book_type = filtered_book.book_type
+    return book_type
 
 # <---------------------------------END of server routes and methods-------------------------------------------------------------------> 
 
+def convert_date_to_int(date):
+    datetime = int(date)
 if __name__ == '__main__':
     app.run(debug=True)
+    get_book_type(1)

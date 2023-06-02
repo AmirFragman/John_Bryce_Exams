@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -36,28 +35,27 @@
         background-color: #f5f5f5;
       }
     </style>
-
-    <title>Customers table</title>
+    <title>Loans</title>
   </head>
   <body>
-    <h1>Customers table</h1>
+    <h1>Loans</h1>
     <table>
       <thead>
         <tr>
           <th>ID</th>
-          <th>Name</th>
-          <th>City</th>
-          <th>Age</th>
+          <th>Customer's ID</th>
+          <th>Book's ID</th>
+          <th>Loan date</th>
+          <th>Return date</th>
         </tr>
       </thead>
       <tbody id="table-body"></tbody>
     </table>
 
-
     <script>
       MY_SERVER = "http://127.0.0.1:5000";
 
-        axios.get(MY_SERVER + "/customers").then((response) => {
+        axios.get(MY_SERVER + "/loans/late").then((response) => {
           var tableData = response.data;
 
           var tbody = document.getElementById("table-body");
@@ -69,17 +67,21 @@
             idCell.textContent = tableData[i].id;
             row.appendChild(idCell);
 
-            var nameCell = document.createElement("td");
-            nameCell.textContent = tableData[i].name;
-            row.appendChild(nameCell);
+            var custIDCell = document.createElement("td");
+            custIDCell.textContent = tableData[i].cust_id;
+            row.appendChild(custIDCell);
 
-            var cityCell = document.createElement("td");
-            cityCell.textContent = tableData[i].city;
-            row.appendChild(cityCell);
+            var bookIDCell = document.createElement("td");
+            bookIDCell.textContent = tableData[i].book_id;
+            row.appendChild(bookIDCell);
 
-            var ageCell = document.createElement("td");
-            ageCell.textContent = tableData[i].age;
-            row.appendChild(ageCell);
+            var loanDateCell = document.createElement("td");
+            loanDateCell.textContent = tableData[i].loan_date;
+            row.appendChild(loanDateCell);
+
+            var returnDateCell = document.createElement("td");
+            returnDateCell.textContent = tableData[i].return_date;
+            row.appendChild(returnDateCell);
 
             tbody.appendChild(row);
           }
@@ -87,25 +89,6 @@
         .catch((error) => {
             console.log(error);
         });
-        
-        const search = () => {
-            axios.get(MY_SERVER + `/customers/search/${cust_name.value}`)
-                .then(response => {
-                    const data = response.data;
-                    found_customer.innerHTML = `<div> Customer ID: ${data.id}<br>
-                         Customer's Name: ${data.name}<br>
-                         Age: ${data.age}<br>
-                         City: ${data.city}
-                            </div>`;
-                })
-                .catch(error => {
-                    console.error('An error occurred:', error);
-                    found_customer.innerHTML = `<div> Customer not found... </div> `
-
-                });
-        };
-
-    
     </script>
   </body>
 </html>
