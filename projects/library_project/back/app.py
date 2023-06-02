@@ -1,6 +1,6 @@
 import json
 import flask
-from flask import Flask, request
+from flask import Flask, flash, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer, ForeignKey, Date
 from sqlalchemy.orm import relationship
@@ -105,7 +105,7 @@ class Loans(db.Model):
         self.return_date = return_date
 
     def __repr__(self):
-        return f"Loans('{self.id}, {self.cust_id}, {self.book_id}', '{self.loan_date}','{self.return_date}', {self.active})"
+        return f"Loans('{self.id}, {self.cust_id}, {self.book_id}', '{self.loan_date}','{self.return_date}')"
     
     def to_dict(self):
         return {
@@ -122,12 +122,12 @@ class Loans(db.Model):
 # MY_SERVER = http://127.0.0.1:5000
 
 # Homepage
-@app.route("/")
+@app.route("/", methods = ['GET'])
 def homepage():
-    return flask.redirect("/index.html")
+    return redirect("/index.html")
 
 #Customers
-#http://127.0.0.1:5000/allcustomers 
+#http://127.0.0.1:5000/customers 
 @app.route('/customers', methods = ['GET'])
 def get_all_customers():
     customers = Customers.query.filter_by(active=1).all()
@@ -185,7 +185,7 @@ def show_books():
 
 #Book addition
 #http://127.0.0.1:5000/books
-@app.route('/books/', methods = ['POST'])
+@app.route('/books', methods = ['POST'])
 def new_book():
     data = request.get_json()
     name= data["name"]
@@ -230,8 +230,8 @@ def delete_book(id):
     return "The book does not exist"
 
 #Loans
-#http://127.0.0.1:5000/allLoans 
-@app.route("/allLoans", methods=['GET','POST'])
+#http://127.0.0.1:5000/loans 
+@app.route("/loans", methods=['GET'])
 def show_loans():
     loans = Loans.query.all()
     return flask.jsonify([loan.to_dict() for loan in loans])
@@ -240,8 +240,8 @@ def show_loans():
     #     dict["is_late": ...]
     # return flask.jsonify(dicts)
 
-#http://127.0.0.1:5000/newLoan
-@app.route('/newLoan', methods = ['POST'])
+#http://127.0.0.1:5000/loans
+@app.route('/loans', methods = ['POST'])
 def new_loan():
     data = request.get_json()
     cust_id = data["cust_id"]
@@ -273,9 +273,8 @@ def new_loan():
     return flask.jsonify({'message': 'Loan created successfully'})
 
 #Loan update
-#http://127.0.0.1:5000/updateLoan/<id>
-@app.route('/updateLoan/<id>', methods = ['PUT'])
-@app.route('/updateLoan/', methods = ['PUT'])
+#http://127.0.0.1:5000/loans/<id>
+@app.route('/loans/<id>', methods = ['POST'])
 def update_loan(id):
     data = request.get_json()
     updated_row = Loans.query.filter_by(id=id).first()
@@ -290,9 +289,8 @@ def update_loan(id):
     return "The loan does not exist"
 
 #Return book
-#http://127.0.0.1:5000/returnBook/<id>
-@app.route('/returnBook/<id>', methods = ['PUT'])
-@app.route('/returnBook/', methods = ['PUT'])
+#http://127.0.0.1:5000/loans/<id>
+@app.route('/loans/<id>', methods = ['PUT'])
 def delete_loan(id):
     data = request.get_json()
     delete_row = Loans.query.filter_by(id=id).first()
@@ -307,4 +305,3 @@ def delete_loan(id):
 
 if __name__ == '__main__':
     app.run(debug=True)
-    # app.run(debug=False)

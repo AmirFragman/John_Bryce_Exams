@@ -27,7 +27,7 @@
       
       <script>
         function returnBook() {
-          const url = "http://127.0.0.1:5000/returnBook/${loan_id.value}";
+          const url = "http://127.0.0.1:5000/loans/${loan_id.value}";
           const data = {
             id: loan_id.value,
             cust_id: customerId.value,

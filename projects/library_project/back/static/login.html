@@ -1,8 +1,9 @@
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <title>Login Page</title>
@@ -26,35 +27,35 @@
 
   </head>
   <body>
+    <form action=""></form>
     <div class="container">
       <h1 class="text-center">Please Login</h1>
       <br>
+      <form action="" type="post"></form>
       <div>
-        <input type="text" class="form-control" placeholder="Username" id="username_data">
-        <br>
-        <input type="password" class="form-control" placeholder="Password" id="password_data">
-        <br>
-        <button class="btn btn-primary btn-block" type="button" onclick="login_data()">Login</button>
+          <div>
+            <input type="text" class="form-control" placeholder="Username" id="username_input">
+            <br>
+            <input type="password" class="form-control" placeholder="Password" id="password_input">
+            <br>
+            <button class="btn btn-primary btn-block" type="button" onclick="login_data()">Login</button>      
       </div>
       </div>
     </div>
 
     <script>
       function login_data() {
-       const data = {
-            username : username_data.value,
-            password : password_data.value
-          }
-        
         const url = `http://127.0.0.1:5000/login`;
-        axios.post(url, {
-            username : username_data.value,
-            password : password_data.value
-          }).then((response) => {const message = `Username ${username_data.value} is logged in.`;
+        const data = {
+            username : username_input.value,
+            password : password_input.value
+          }      
+        axios.post(url,data).then((response) => {const message = ` "${username_input.value}" is logged in.`;
           alert(message);
         })
         .catch((error) => {
-          console.error("Error updating customer:", error);})
+          console.error("Error updating customer:", error);
+        })
         }
     </script>
   </body>
