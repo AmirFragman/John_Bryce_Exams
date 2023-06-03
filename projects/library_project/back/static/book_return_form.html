@@ -9,45 +9,69 @@
     <title>Create new loan</title>
 </head>
 <body>
-    <div>
-        <label for="id">Loan ID:</label>
-        <input type="number" id="loan_id" name="loan_id" required min="1"><br>
+  <div>
+    <label for="loan_id">Loan ID:</label>
+    <input type="number" id="loan_id" name="loan_id" required min="1" oninput="searchLoan()"><br>
 
-        <label for="customerId">Customer ID:</label>
-        <input type="number" id="customerId" name="customerId" required min="1"><br>
-      
-        <label for="bookId">Book ID:</label>
-        <input type="number" id="bookId" name="bookId" required min="1"><br>
-      
-        <label for="returnDate">Return Date:</label>
-        <input type="date" id="returnDate" name="returnDate"><br>
-      
-        <button type="button" onclick="returnBook()">Create Loan</button>
-    </div>
-      
-      <script>
-        function returnBook() {
-          const url = "http://127.0.0.1:5000/loans/${loan_id.value}";
-          const data = {
-            id: loan_id.value,
-            cust_id: customerId.value,
-            book_id: bookId.value,
-            return_date: returnDate.value
-          };
-  
-          axios.post(url, data).then((response) => {
-              const message = `New loan created id of loaner: ${customerId.value}, Book ID: ${bookId.value}`;
-              alert(message);
-              return_to_table();
+    <label for="customerId">Customer ID:</label>
+    <input type="number" id="customerId" name="customerId" required min="1"><br>
+
+    <label for="bookName">Book Name:</label>
+    <input type="text" id="bookName" name="bookName" required><br>
+
+    <label for="returnDate">Return Date:</label>
+    <input type="date" id="returnDate" name="returnDate"><br>
+
+    <button type="button" onclick="returnBook()">Create Loan</button>
+</div>
+
+<script>
+    function searchLoan() {
+        const loanId = document.getElementById('loan_id').value;
+        const url = `http://127.0.0.1:5000/loans/search/${loanId}`;
+
+        axios.get(url)
+            .then((response) => {
+                const loanData = response.data;
+                if (loanData) {
+                    document.getElementById('customerId').value = loanData.customer_id;
+                    document.getElementById('bookName').value = loanData.book_name;
+                    document.getElementById('returnDate').value = loanData.return_date;
+                } else {
+                    // Clear the input fields if loan not found
+                    document.getElementById('customerId').value = '';
+                    document.getElementById('bookName').value = '';
+                    document.getElementById('returnDate').value = '';
+                    alert("Loan not found");
+                }
             })
             .catch((error) => {
-              console.error("Error adding book:", error);
+                console.error("Error searching loan:", error);
             });
-        }
-        function return_to_table(){
-          const url = "http://127.0.0.1:5000/newLoan"
-          return url
-        }
-      </script>
+    }
+
+    function returnBook() {
+        const loanId = document.getElementById('loan_id').value;
+        const bookName = document.getElementById('bookName').value;
+        const returnDate = document.getElementById('returnDate').value;
+
+        const url = `http://127.0.0.1:5000/loans/${loanId}`;
+        const data = {
+            id: loanId,
+            book_name: bookName,
+            return_date: returnDate
+        };
+
+        axios.post(url, data)
+            .then((response) => {
+                const message = `Loan ID ${loanId} - Book Name ${bookName} returned successfully`;
+                alert(message);
+            })
+            .catch((error) => {
+                console.error("Error returning book:", error);
+            });
+    }
+</script>
+
 </body>
 </html>
