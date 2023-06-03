@@ -14,23 +14,18 @@
     <label for="id">Book ID:</label>
     <input type="number" id="book_id" name="id" required min="1"><br>
 
-    <label for="name">Book Name:</label>
-    <input type="text" id="book_name" name="name" required minlength="2"><br>
-    
-    <button onclick="delCust();">Delete Book</button>
+    <button onclick="deleteBook();">Delete Book</button>
 </div>
 
 <script>
-    function delCust() {
+    function deleteBook() {
       const url = `http://127.0.0.1:5000/books/${book_id.value}`;
       const data = {
-        id: book_id.value,
-        name: book_name.value,
-        active: false
+        id: book_id.value
       };
 
       axios.delete(url, data).then((response) => {
-          const message = `Deleted Book ${book_name.value}, with ID: ${book_id.value}`;
+          const message = `Deleted Book with ID: ${book_id.value}`;
           alert(message);
         })
         .catch((error) => {

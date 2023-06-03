@@ -156,9 +156,13 @@ def update_customer(id):
     data = request.get_json()
     updated_row = Customers.query.filter_by(id=id).first()
     if updated_row:
-        updated_row.name =data["name"]
-        updated_row.city =data["city"]
-        updated_row.age =data["age"]
+        if len(data["name"])>0:
+            updated_row.name= data["name"]
+        if len(data["city"])>0:
+            updated_row.city= data["city"]
+        if len(data["age"]) > 0:
+            updated_row.age= data["age"]
+        updated_row.active= data["active"]
         db.session.commit()
         return f"Customer ID:{id}, Name: {updated_row.name} got updated"
     return "The customer does not exist"
@@ -207,11 +211,16 @@ def update_book(id):
     data = request.get_json()
     updated_row = Books.query.filter_by(id=id).first()
     if updated_row:
-        updated_row.name = data['name']
-        updated_row.author = data["author"]
-        updated_row.year = data["year"]
-        updated_row.book_type = data["book_type"]
-        updated_row.active = data["active"]
+        if len(data["name"])>0:
+            updated_row.name= data["name"]
+        if len(data["author"])>0:
+            updated_row.author= data["author"]
+        if len(data["year"]) > 0:
+            updated_row.year= data["year"]
+        if len(data["book_type"]) > 0:
+            updated_row.book_type= data["book_type"]
+        updated_row.active= data["active"]
+ 
         db.session.commit()
         return f"Book ID:{id}, Name: {updated_row.name} got updated"
     return "The book does not exist"
@@ -233,12 +242,6 @@ def delete_book(id):
 def show_loans():
     loans = Loans.query.all()
 
-    # customer = Customers.query.filter_by(id=id).first()
-    # cust_name = customer.name
-    # book = Books.query.filter_by(id=id).first()
-    # book_name = book.name
-    # cust_book = Loans.query.join(Books, Customers).filter_by(id=id).all()
-    # return flask.jsonify(cust_book.to_dict(Loans.id, Customers.name, Books.name)
     return flask.jsonify([loan.to_dict() for loan in loans])
 
 #Loans
@@ -271,34 +274,17 @@ def new_loan():
     cust_id = data["cust_id"]
     book_id = data["book_id"]
 
-    if not cust_id or not book_id:
-        return flask.jsonify({'error': 'Missing required fields'})
-    
+
+
     cust_id = int(cust_id)
     book_id = int(book_id)
+
     loan_date = datetime.now().strftime('%Y-%m-%d')
     newLoan = Loans(cust_id=cust_id, book_id=book_id, loan_date=loan_date)
 
     db.session.add(newLoan)
     db.session.commit()
-    return f"New loan was added."
-
-    
-#Loan update
-#http://127.0.0.1:5000/loans/<id>
-@app.route('/loans/<id>', methods = ['POST'])
-def update_loan(id):
-    data = request.get_json()
-    updated_row = Loans.query.filter_by(id=id).first()
-    if updated_row:
-        updated_row.cust_id = data["cust_id"]
-        updated_row.book_id = data["book_id"]
-        updated_row.loan_date = data["loan_date"]
-        updated_row.return_date = data["return_date"]
-        updated_row.active = data["active"]
-        db.session.commit()
-        return f"Loan ID:{id}, loaned by Customer: {updated_row.cust_id} got updated"
-    return "The loan does not exist"
+    return "New loan was added."
 
 #Return book
 #http://127.0.0.1:5000/loans/return/<id>
@@ -311,16 +297,7 @@ def delete_loan(id):
         return f"Loan ID:{id} got returned"
     return "The loan does not exist"
 
-
-
 # <---------------------------------END of server routes and methods-------------------------------------------------------------------> 
-def get_book_type(book_id):
-    filtered_book = Books.query.filter_by(id=book_id).first()
-    book_type = filtered_book.book_type
-    return book_type
 
-def convert_date_to_int(date):
-    datetime = int(date)
 if __name__ == '__main__':
     app.run(debug=True)
-    # app.run(debug=False)
