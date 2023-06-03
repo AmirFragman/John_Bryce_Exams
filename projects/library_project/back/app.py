@@ -27,7 +27,7 @@ class CustomJSONEncoder(json.JSONEncoder):
 
 app.json_encoder = CustomJSONEncoder
 
-# <---------------------------------creating tables-------------------------------------------------------------->
+# <---------------------------------creating tables with classes-------------------------------------------------------------->
 
 # Customers table - columns: id (PK), name, city, age, active
 class Customers(db.Model):
@@ -244,7 +244,7 @@ def show_loans():
 
     return flask.jsonify([loan.to_dict() for loan in loans])
 
-#Loans
+#late loans
 #http://127.0.0.1:5000/loans/late 
 @app.route("/loans/late", methods=['GET'])
 def show_late_loans():

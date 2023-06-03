@@ -1,3 +1,4 @@
 test.py
 projects/library_project/back/static/tests.html
 projects/library_project/back/library.db-journal
+projects/library_project/back/clean_library.db

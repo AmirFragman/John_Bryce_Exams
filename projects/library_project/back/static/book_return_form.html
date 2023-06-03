@@ -10,61 +10,22 @@
 </head>
 <body>
   <div>
-    <label for="loan_id">Loan ID:</label>
-    <input type="number" id="loan_id" name="loan_id" required min="1" oninput="searchLoan()"><br>
+    <label for="loanId">Loan ID:</label>
+    <input type="number" id="loanId" name="loanId" required min="1">
 
-    <label for="customerId">Customer ID:</label>
-    <input type="number" id="customerId" name="customerId" required min="1"><br>
-
-    <label for="bookName">Book Name:</label>
-    <input type="text" id="bookName" name="bookName" required><br>
-
-    <label for="returnDate">Return Date:</label>
-    <input type="date" id="returnDate" name="returnDate"><br>
-
-    <button type="button" onclick="returnBook()">Create Loan</button>
+    <button type="button" onclick="returnBook()">End Loan</button>
 </div>
 
 <script>
-    function searchLoan() {
-        const loanId = document.getElementById('loan_id').value;
-        const url = `http://127.0.0.1:5000/loans/search/${loanId}`;
-
-        axios.get(url)
-            .then((response) => {
-                const loanData = response.data;
-                if (loanData) {
-                    document.getElementById('customerId').value = loanData.customer_id;
-                    document.getElementById('bookName').value = loanData.book_name;
-                    document.getElementById('returnDate').value = loanData.return_date;
-                } else {
-                    // Clear the input fields if loan not found
-                    document.getElementById('customerId').value = '';
-                    document.getElementById('bookName').value = '';
-                    document.getElementById('returnDate').value = '';
-                    alert("Loan not found");
-                }
-            })
-            .catch((error) => {
-                console.error("Error searching loan:", error);
-            });
-    }
-
     function returnBook() {
-        const loanId = document.getElementById('loan_id').value;
-        const bookName = document.getElementById('bookName').value;
-        const returnDate = document.getElementById('returnDate').value;
-
-        const url = `http://127.0.0.1:5000/loans/${loanId}`;
+        const url = `http://127.0.0.1:5000/loans/return/${loanId.value}`;
         const data = {
-            id: loanId,
-            book_name: bookName,
-            return_date: returnDate
+            id: loanId
         };
 
         axios.post(url, data)
             .then((response) => {
-                const message = `Loan ID ${loanId} - Book Name ${bookName} returned successfully`;
+                const message = `Loan number: ${loanId.value} has returned successfully`;
                 alert(message);
             })
             .catch((error) => {
